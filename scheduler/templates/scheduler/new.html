@@ -1,0 +1,16 @@
+<form action="{% url 'scheduler:new' %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Create an Appointment</legend>
+    <label for="description">Description: </label>
+    <input type="text" name="appointment_text">
+    <label for="time">Date and Time: </label>
+    <input type="datetime-local" name="appointment_time">
+    <input type="submit" value="Submit">
+  </fieldset>
+</form>
+
+
+<ul>
+  <li><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
+</ul>

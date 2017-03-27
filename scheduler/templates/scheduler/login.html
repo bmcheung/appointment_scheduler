@@ -1,0 +1,32 @@
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li{% if message.tags == ERROR %} {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form action="{% url 'scheduler:login' %}" method="post">
+  {% csrf_token %}
+<fieldset>
+  <legend>Register</legend>
+  {{form}}
+  <input type="hidden" name="extra" value="0">
+  <input type="submit" value="Submit">
+</fieldset>
+</form>
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li{% if message.tags == INFO %} {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form action="{% url 'scheduler:login' %}" method="post">
+  {% csrf_token %}
+<fieldset>
+  <legend>Login</legend>
+  {{form}}
+  <input type="hidden" name="extra" value="1">
+  <input type="submit" value="Submit">
+</fieldset>
+</form>

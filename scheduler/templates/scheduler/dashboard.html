@@ -1,0 +1,29 @@
+<h1>Hello, {{request.user.username | title}}</h1>
+
+{% if appointments %}
+<table>
+  <tr>
+    <th>Description:</th>
+    <th>Date and Time:</th>
+    <th>Status:</th>
+    <th>Options:</th>
+  </tr>
+{% for appointment in appointments %}
+  <tr>
+    <td><a href="{% url 'scheduler:detail' appointment.pk %}">{{appointment.appointment_text}}</a></td>
+    <td>{{appointment.time}}</td>
+    <td>{{appointment.status}}</td>
+    <td> <button type="button" name="button"><a href="{% url 'scheduler:delete' appointment.pk %}">Delete</a></td></button>
+  </tr>
+{% endfor %}
+</table>
+{% endif%}
+
+<ul>
+  <li>
+    <a href="{% url 'scheduler:new' %}">New</a>
+  </li>
+  <li>
+    <a href="{% url 'scheduler:logout' %}">Logout</a>
+  </li>
+</ul>

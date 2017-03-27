@@ -1,0 +1,11 @@
+<h1>Delete this appointment?</h1>
+<p>Description: {{appointment.appointment_text}}</p>
+<p>Date and Time: {{appointment.time}}</p>
+<p>Status: {{appointment.status}}</p>
+<form action="{% url 'scheduler:delete' appointment.pk %}" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Yes">
+  <button type="button" name="button">
+    <a href="{% url 'scheduler:dashboard'%}">No</a>
+  </button>
+</form>
