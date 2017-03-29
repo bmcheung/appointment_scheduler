@@ -11,7 +11,7 @@ class Appointment(models.Model):
         return self.appointment_text
     def appointment_was_missed(self):
         now = timezone.now()
-        return now < self.time
+        return now > self.time and self.status == 'Pending'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='related user')
     appointment_text = models.CharField('appointment description', max_length=200)

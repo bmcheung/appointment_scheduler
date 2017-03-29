@@ -53,8 +53,8 @@ class Dashboard(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request):
         appointments = Appointment.objects.filter(user=request.user)
+        
         if appointments is not None:
-            # print appointments
             context = {
                 'appointments':appointments
             }
