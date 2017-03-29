@@ -27,7 +27,6 @@ class Log_In(View):
         form = UserForm(request.POST)
         form_type = request.POST['extra']
         if form.is_valid():
-            print '********'+form_type+'*********'
             data = form.cleaned_data
             if form_type == '0':
                 try:
@@ -37,14 +36,13 @@ class Log_In(View):
                         return redirect(reverse('scheduler:dashboard'))
                 except:
                     messages.add_message(request, messages.ERROR, 'Username must be unique.')
-                    return redirect(reverse('scheduler:login'))
             elif form_type == '1':
                 user = authenticate(username=data['username'], password=data['password'])
                 if user is not None:
                     login(request, user)
                     return redirect(reverse('scheduler:dashboard'))
                 else:
-                    messages.add_message(request, messages.INFO, 'Username or password is incorrect')
+                    messages.add_message(request, messages.ERROR, 'Username or password is incorrect')
         return redirect(reverse('scheduler:home'))
 
 def log_out(request):
@@ -99,7 +97,6 @@ class New(LoginRequiredMixin, View):
         time = ' '.join(time.split('T'))
         form = AppointmentForm(request.POST)
         if form.is_valid() and request.user.is_authenticated:
-            print time
             data = form.cleaned_data
             appointment = Appointment.objects.create(user = request.user,appointment_text = data['appointment_text'],time = time)
         else:
