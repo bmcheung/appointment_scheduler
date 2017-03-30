@@ -5,5 +5,5 @@
 
 To Do
 
-[] add date validations to prevent adding appointments in past times
+[x] add date validations to prevent adding appointments in past times
 [x] add status changes to automatically change pending to missed if past appt time
