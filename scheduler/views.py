@@ -61,18 +61,15 @@ def log_out(request):
 class Dashboard(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request):
-        appointments = Appointment.objects.filter(user=request.user)
-
-        if appointments is not None:
-            context = {
-                'appointments':appointments
-            }
-        else:
-            context = {}
+        # appointments = Appointment.objects.filter(time__lt=timezone.now())
+        todayappointments = Appointment.objects.filter(user=request.user,time__gte=timezone.now()-datetime.timedelta(days=1), time__lt=timezone.now()+datetime.timedelta(days=1))
+        futureappointments = Appointment.objects.filter(user=request.user, time__gt=timezone.now()+datetime.timedelta(days=1))
+        context = {}
+        if todayappointments is not None:
+            context['todayappointments'] = todayappointments
+        if futureappointments is not None:
+            context['futureappointments'] = futureappointments
         return render(request, 'scheduler/dashboard.html', context)
-    # def post(self, request):
-    #     return redirect(reverse('scheduler:home'))
-
 
 class Detail(LoginRequiredMixin, View):
     login_url = '/'
