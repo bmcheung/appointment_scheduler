@@ -2,8 +2,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/style/detail.css' %}">
 
 
-<ul id="navbar">
-  <li><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
+<ul>
+  <li id="navbar"><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
 </ul>
 
 <form action="{% url 'scheduler:new' %}" method="post">
@@ -17,3 +17,9 @@
     <input type="submit" value="Submit">
   </fieldset>
 </form>
+
+<ul>
+    {% for message in messages %}
+    <li{% if message.tags%} {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>

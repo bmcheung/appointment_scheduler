@@ -1,26 +1,27 @@
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.db.models import When, F, Q
+# from django.db.models import When, F, Q
+
 from .models import Appointment
 from .forms import UserForm, NewAppointmentForm, UpdateAppointmentForm
+
 import datetime
 
-from django.contrib.auth.models import User
 # Create your views here.
 
-def toCleanedTime(string):
-    return ' '.join(string.split('T'))
+def toCleanedTime(str):
+    return ' '.join(str.split('T'))
 
-def fromCleanedTime(string):
-    return 'T'.join(string.split(' '))[:16]
+def fromCleanedTime(str):
+    return 'T'.join(str.split(' '))[:16]
 
 def home(request):
     return redirect(reverse('scheduler:login'))
@@ -107,10 +108,11 @@ class New(LoginRequiredMixin, View):
         time = toCleanedTime(str(request.POST['appointment_time']))
         form = NewAppointmentForm(request.POST)
         print form.is_valid()
-        if form.is_valid() and request.user.is_authenticated():
+        if form.is_valid() and request.user.is_authenticated() and timezone.now() < datetime.datetime.strptime(time,'%Y-%m-%d %H:%M'):
             data = form.cleaned_data
             appointment = Appointment.objects.create(user = request.user,appointment_text = data['appointment_text'],time = time)
         else:
+            messages.add_message(request, messages.ERROR, 'Please enter a date in the future.')
             return redirect(reverse('scheduler:new'))
         return redirect(reverse('scheduler:dashboard'))
 
