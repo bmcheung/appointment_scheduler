@@ -15,5 +15,5 @@ class Appointment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='related user')
     appointment_text = models.CharField('appointment description', max_length=200)
-    time = models.DateTimeField('scheduled time', unique_for_date='time')
+    time = models.DateTimeField('scheduled time', unique=True)
     status = models.CharField('appointment status', max_length=30, default='Pending')

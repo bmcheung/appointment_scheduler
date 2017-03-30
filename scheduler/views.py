@@ -107,10 +107,14 @@ class New(LoginRequiredMixin, View):
     def post(self, request):
         time = toCleanedTime(str(request.POST['appointment_time']))
         form = NewAppointmentForm(request.POST)
-        print form.is_valid()
         if form.is_valid() and request.user.is_authenticated() and timezone.now() < datetime.datetime.strptime(time,'%Y-%m-%d %H:%M'):
             data = form.cleaned_data
-            appointment = Appointment.objects.create(user = request.user,appointment_text = data['appointment_text'],time = time)
+            try:
+                appointment = Appointment.objects.create(user = request.user,appointment_text = data['appointment_text'],time = time)
+            except:
+                messages.add_message(request, messages.ERROR, 'This time overlaps with another appointment.')
+                return redirect(reverse('scheduler:new'))
+
         else:
             messages.add_message(request, messages.ERROR, 'Please enter a date in the future.')
             return redirect(reverse('scheduler:new'))
