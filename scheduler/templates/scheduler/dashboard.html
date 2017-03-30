@@ -14,10 +14,10 @@
 
 <h1>Hello, {{request.user.username | title}}</h1>
 
-
 {% if todayappointments %}
-<h2>View Nearby Appointments</h2>
-<table>
+<div class="apptables">
+<h2>View Today's Appointments</h2>
+<table >
   <tr>
     <th>Description:</th>
     <th>Date and Time:</th>
@@ -33,11 +33,13 @@
   </tr>
 {% endfor %}
 </table>
+</div>
 {% else %}
 <h2>Your Schedule is clear for today!</h2>
 {% endif%}
 
 {% if futureappointments %}
+<div class="apptables">
 <h2>View Coming Appointments</h2>
 <table>
   <tr>
@@ -55,4 +57,27 @@
   </tr>
 {% endfor %}
 </table>
+</div>
+{% endif%}
+
+{% if pastappointments %}
+<div class="apptables">
+<h2>View Old Appointments</h2>
+<table>
+  <tr>
+    <th>Description:</th>
+    <th>Date and Time:</th>
+    <th>Status:</th>
+    <th>Options:</th>
+  </tr>
+{% for appointment in pastappointments %}
+  <tr>
+    <td><a href="{% url 'scheduler:detail' appointment.pk %}">{{appointment.appointment_text}}</a></td>
+    <td>{{appointment.time}}</td>
+    <td>{{appointment.status}}</td>
+    <td> <button type="button" name="button"><a href="{% url 'scheduler:delete' appointment.pk %}">Delete</a></td></button>
+  </tr>
+{% endfor %}
+</table>
+</div>
 {% endif%}

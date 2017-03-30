@@ -1,3 +1,8 @@
+.apptables {
+  display: inline-block;
+  width: 400px;
+}
+
 li {
   display: inline-block;
 }

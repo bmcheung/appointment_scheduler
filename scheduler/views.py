@@ -65,11 +65,14 @@ class Dashboard(LoginRequiredMixin, View):
         Appointment.objects.filter(time__lt=timezone.now(),status='Pending').update(status='Missed')
         todayappointments = Appointment.objects.filter(user=request.user,time__range=(datetime.datetime.combine(datetime.date.today(),datetime.time.min),datetime.datetime.combine(datetime.date.today(),datetime.time.max))).order_by('time')
         futureappointments = Appointment.objects.filter(user=request.user, time__gt=datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1),datetime.time.min)).order_by('time')
+        pastappointments = Appointment.objects.filter(user=request.user, time__lt=datetime.datetime.combine(datetime.date.today()-datetime.timedelta(days=1),datetime.time.max)).order_by('time')
         context = {}
         if todayappointments is not None:
             context['todayappointments'] = todayappointments
         if futureappointments is not None:
             context['futureappointments'] = futureappointments
+        if pastappointments is not None:
+            context['pastappointments'] = pastappointments
         return render(request, 'scheduler/dashboard.html', context)
 
 class Detail(LoginRequiredMixin, View):
