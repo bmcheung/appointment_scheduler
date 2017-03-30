@@ -8,6 +8,7 @@ from django.views import View
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.db.models import When, F, Q
 from .models import Appointment
 from .forms import UserForm, NewAppointmentForm, UpdateAppointmentForm
 import datetime
@@ -61,9 +62,9 @@ def log_out(request):
 class Dashboard(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request):
-        # appointments = Appointment.objects.filter(time__lt=timezone.now())
-        todayappointments = Appointment.objects.filter(user=request.user,time__gte=timezone.now()-datetime.timedelta(days=1), time__lt=timezone.now()+datetime.timedelta(days=1))
-        futureappointments = Appointment.objects.filter(user=request.user, time__gt=timezone.now()+datetime.timedelta(days=1))
+        Appointment.objects.filter(time__lt=timezone.now(),status='Pending').update(status='Missed')
+        todayappointments = Appointment.objects.filter(user=request.user,time__range=(datetime.datetime.combine(datetime.date.today(),datetime.time.min),datetime.datetime.combine(datetime.date.today(),datetime.time.max))).order_by('time')
+        futureappointments = Appointment.objects.filter(user=request.user, time__gt=datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1),datetime.time.min)).order_by('time')
         context = {}
         if todayappointments is not None:
             context['todayappointments'] = todayappointments
