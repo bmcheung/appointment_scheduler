@@ -6,7 +6,7 @@ from .models import Appointment
 # Create your tests here.
 
 class AppointmentMethodTests(TestCase):
-    def test_appointment_was_missed_with_status_pending(self):
+    def test_appointment_was_missed_with_status_Pending(self):
         """
         appointment_was_missed should return True if
         the appointment is scheduled for a time before
@@ -24,4 +24,3 @@ class AppointmentMethodTests(TestCase):
         past_date = timezone.now() - datetime.timedelta(days=30)
         past_appointment = Appointment(time = past_date, status='Completed')
         self.assertIs(past_appointment.appointment_was_missed(), False)
-    

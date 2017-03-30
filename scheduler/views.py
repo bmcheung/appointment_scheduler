@@ -20,6 +20,8 @@ def home(request):
 
 class Log_In(View):
     def get(self, request):
+        if request.user.is_authenticated():
+            return redirect(reverse('scheduler:dashboard'))
         form = UserForm()
         return render(request, 'scheduler/login.html', {'form':form})
 
@@ -53,7 +55,7 @@ class Dashboard(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request):
         appointments = Appointment.objects.filter(user=request.user)
-        
+
         if appointments is not None:
             context = {
                 'appointments':appointments
