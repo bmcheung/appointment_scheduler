@@ -6,7 +6,7 @@ input {
   display: block;
 }
 
-li {
+.navitem {
   display: inline-block;
 }
 
