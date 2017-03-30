@@ -1,5 +1,14 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style/detail.css' %}">
+
+<ul id="navbar">
+  <li><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
+</ul>
+
 <form action="{% url 'scheduler:detail' appointment.pk %}" method="post">
   {% csrf_token %}
+  <fieldset>
+    <legend>Update Your Appointment</legend>
   <label for="description">Description: </label>
   <input type="text" name="appointment_text" value="{{appointment.appointment_text}}">
   <label for="time">Time: </label>
@@ -12,4 +21,5 @@
     {% endfor%}
   </select>
   <input type="submit" value="Update">
+</fieldset>
 </form>

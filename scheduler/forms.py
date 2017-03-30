@@ -12,7 +12,11 @@ class UserForm(forms.Form):
 #         model = User
 #         fields = ['username','password']
 
-class AppointmentForm(forms.Form):
+class NewAppointmentForm(forms.Form):
+    appointment_text = forms.CharField(label='Description', max_length=200, required=True, error_messages={'required': 'Please enter an appointment.', 'max_length': 'Please enter a shorter appointment.'})
+    appointment_time = forms.DateTimeField(label='Date and Time', required=True, input_formats=['%Y-%m-%dT%H:%M'], error_messages={'required': 'Please enter a date and time.'})
+
+class UpdateAppointmentForm(forms.Form):
     appointment_text = forms.CharField(label='Description', max_length=200, required=True, error_messages={'required': 'Please enter an appointment.', 'max_length': 'Please enter a shorter appointment.'})
     appointment_time = forms.DateTimeField(label='Date and Time', required=True, input_formats=['%Y-%m-%dT%H:%M'], error_messages={'required': 'Please enter a date and time.'})
     status = forms.CharField(label='Status')

@@ -1,0 +1,9 @@
+form {
+  display: inline-block;
+}
+input {
+  display: block;
+}
+fieldset {
+  padding: 20px 5px 20px 5px;
+}

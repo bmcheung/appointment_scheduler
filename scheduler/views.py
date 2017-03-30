@@ -9,11 +9,17 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Appointment
-from .forms import UserForm, AppointmentForm
+from .forms import UserForm, NewAppointmentForm, UpdateAppointmentForm
 import datetime
 
 from django.contrib.auth.models import User
 # Create your views here.
+
+def toCleanedTime(string):
+    return ' '.join(string.split('T'))
+
+def fromCleanedTime(string):
+    return 'T'.join(string.split(' '))[:16]
 
 def home(request):
     return redirect(reverse('scheduler:login'))
@@ -48,7 +54,8 @@ class Log_In(View):
         return redirect(reverse('scheduler:home'))
 
 def log_out(request):
-    logout(request)
+    if request.user.is_authenticated():
+        logout(request)
     return redirect('/')
 
 class Dashboard(LoginRequiredMixin, View):
@@ -72,33 +79,34 @@ class Detail(LoginRequiredMixin, View):
     def get(self, request, pk):
         statuses = ['Pending', 'Missed', 'Completed']
         appointment = get_object_or_404(Appointment, pk = pk)
+        appointment.time = fromCleanedTime(str(appointment.time))
         statuses.remove(appointment.status)
         context = {'appointment':appointment, 'statuses':statuses}
         return render(request, 'scheduler/detail.html', context)
     def post(self, request, pk):
-        time = str(request.POST['appointment_time'])
-        time = ' '.join(time.split('T'))
-        form = AppointmentForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated:
+        form = UpdateAppointmentForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated():
             data = form.cleaned_data
             appointment = Appointment.objects.get(pk = pk)
-            appointment.time = time
+            appointment.time = toCleanedTime(str(request.POST['appointment_time']))
             appointment.appointment_text = data['appointment_text']
             appointment.status = data['status']
             appointment.save()
+        else:
+            print "went here"
         return redirect(reverse('scheduler:dashboard'))
 
 
 class New(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request):
-        form = AppointmentForm()
+        form = NewAppointmentForm()
         return render(request, 'scheduler/new.html', {'form':form})
     def post(self, request):
-        time = str(request.POST['appointment_time'])
-        time = ' '.join(time.split('T'))
-        form = AppointmentForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated:
+        time = toCleanedTime(str(request.POST['appointment_time']))
+        form = NewAppointmentForm(request.POST)
+        print form.is_valid()
+        if form.is_valid() and request.user.is_authenticated():
             data = form.cleaned_data
             appointment = Appointment.objects.create(user = request.user,appointment_text = data['appointment_text'],time = time)
         else:

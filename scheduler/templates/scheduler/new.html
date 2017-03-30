@@ -1,3 +1,11 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style/detail.css' %}">
+
+
+<ul id="navbar">
+  <li><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
+</ul>
+
 <form action="{% url 'scheduler:new' %}" method="post">
   {% csrf_token %}
   <fieldset>
@@ -9,8 +17,3 @@
     <input type="submit" value="Submit">
   </fieldset>
 </form>
-
-
-<ul>
-  <li><a href="{% url 'scheduler:dashboard' %}">Home</a></li>
-</ul>
