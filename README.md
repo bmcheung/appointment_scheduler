@@ -16,7 +16,7 @@
 [] add css
 
 # Screenshots
-[Login](imgs/login.png)
-[Home](imgs/home.png)
-[New](imgs/new.png)
-[Update](imgs/update.png)
+![Login](imgs/login.png)
+![Home](imgs/home.png)
+![New](imgs/new.png)
+![Update](imgs/update.png)
