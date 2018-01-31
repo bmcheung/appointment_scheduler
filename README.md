@@ -4,6 +4,8 @@
    - users can set a status to appointments, automatically updates missed appointments if the status isn't changed after set time
 
  - utilizes django's User class and authentication, class based views, form authentication, minor tdd
+ 
+ - added a route with disabled csrf for Lyft technical sample
 
 # To Do
 
