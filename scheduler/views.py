@@ -8,6 +8,10 @@ from django.views import View
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
 # from django.db.models import When, F, Q
 
 from .models import Appointment
@@ -128,3 +132,14 @@ class Delete(LoginRequiredMixin, View):
     def post(self, request, pk):
         Appointment.objects.get(pk=pk).delete()
         return redirect(reverse('scheduler:dashboard'))
+
+@method_decorator(csrf_exempt, name='dispatch')
+class Test(View):
+    
+    def get(self,request):
+        return HttpResponse('not a post request')
+
+    def post(self, request):
+        d = json.loads(request.body)
+        x, y = d['x'],d['y']
+        return JsonResponse({'sum':x+y})
