@@ -5,7 +5,7 @@
 
  - utilizes django's User class and authentication, class based views, form authentication, minor tdd
  
- - added a route with disabled csrf for Lyft technical sample
+ - added /test route with disabled csrf for Lyft technical sample
 
 # To Do
 
